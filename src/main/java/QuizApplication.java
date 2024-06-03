@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class QuizApplication {
     public static String username = "root";
@@ -7,7 +8,7 @@ public class QuizApplication {
     public static String url = "jdbc:mysql://localhost:3306/sqlQuizDB";
 
 
-    public static void CreateTables() {
+    public static void CreateTable() {
 //        String url = "jdbc:mysql://localhost:3306/sqlQuizDB";
 //        String username = "root";
 //        String password = "password";
@@ -48,11 +49,48 @@ public class QuizApplication {
             e.printStackTrace();
         }
     }
-    public static void DeleteTables() {
+
+    public static void DeleteTable() {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {// Delete operation
+            String deleteTable = "DROP TABLE IF EXISTS Questions";
+            try (PreparedStatement deleteStatement = connection.prepareStatement(deleteTable)) {
+                deleteStatement.executeUpdate();
+                System.out.println("Record deleted successfully");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Quiz getQuiz(int i) {
+        Quiz ret = new Quiz();
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+
+            // Read operation
+            String readQuery = "SELECT question, answer FROM users WHERE id = " + i;
+            try (Statement readStatement = connection.createStatement();
+                 ResultSet resultSet = readStatement.executeQuery(readQuery)) {
+                while (resultSet.next()) {
+                    ret.question = resultSet.getString("question");
+                    ret.answer = resultSet.getString("answer");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+
 
     }
+
     public static void main(String[] args) {
-        CreateTables();
+        DeleteTable();
+        CreateTable();
         int score = 0;
 
         // Setup The Quiz Questions and Answers
@@ -99,11 +137,21 @@ public class QuizApplication {
         arr.add(q10);
         AddQuizQuestions(arr);
 
-        for (int i = 0; i < arr.size();i++) {
+        Quiz q;
+        Scanner scanner = new Scanner(System.in);
+        String check;
+
+
+        for (int i = 0; i < arr.size(); i++) {
+            q = getQuiz(i);
+            System.out.println("For question "+i+":");
+            System.out.println(q.question);
+            check = scanner.next();
+            if (check == q.answer) {
+                System.out.println("You got")
+            }
 
         }
-
-
 
 
     }
