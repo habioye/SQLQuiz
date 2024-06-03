@@ -148,10 +148,15 @@ public class QuizApplication {
             System.out.println(q.question);
             check = scanner.next();
             if (check == q.answer) {
-                System.out.println("You got")
+                System.out.println("You got the question right");
+                score+=1;
+            } else {
+                System.out.println("You got the question wrong");
             }
 
         }
+
+        System.out.println("You have finished the quiz. You score is "+score+"!");
 
 
     }
