@@ -1,4 +1,4 @@
 public class Quiz {
-    String question;
-    String answer;
+    String question; // Question String
+    String answer; // Answer String
 }

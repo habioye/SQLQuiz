@@ -8,11 +8,8 @@ public class QuizApplication {
     public static String url = "jdbc:mysql://localhost:3306/sqlquizdb";
 
 
+    // Creates a table if it does not exist.
     public static void CreateTable() {
-//        String url = "jdbc:mysql://localhost:3306/sqlQuizDB";
-//        String username = "root";
-//        String password = "password";
-
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              Statement statement = connection.createStatement()) {
@@ -30,6 +27,7 @@ public class QuizApplication {
         }
     }
 
+    // Adds the quiz questions and answers from the array list to the SQL database
     public static void AddQuizQuestions(ArrayList<Quiz> arr) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             for (var quiz : arr) {
@@ -51,6 +49,7 @@ public class QuizApplication {
         }
     }
 
+    // Deletes the table if it exists
     public static void DeleteTable() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {// Delete operation
             String deleteTable = "DROP TABLE IF EXISTS Questions";
@@ -65,6 +64,7 @@ public class QuizApplication {
         }
     }
 
+    // Gets the quiz question and answer based on the index.
     public static Quiz getQuiz(int i) {
         Quiz ret = new Quiz();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
@@ -89,6 +89,7 @@ public class QuizApplication {
 
     }
 
+    // Main Application
     public static void main(String[] args) {
         DeleteTable();
         CreateTable();
@@ -157,7 +158,7 @@ public class QuizApplication {
 
         }
 
-        System.out.println("You have finished the quiz. You score is "+score+"!");
+        System.out.println("You have finished the quiz. You score is "+score+" out of 10!");
 
 
     }
