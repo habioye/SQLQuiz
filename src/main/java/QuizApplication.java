@@ -88,56 +88,17 @@ public class QuizApplication {
 
 
     }
+    enum Difficulty {
+        Easy,
+        Medium,
+        Hard
+    }
+
+    
 
     // Main Application
     public static void main(String[] args) {
-        DeleteTable();
-        CreateTable();
-        int score = 0;
 
-        // Set up The Quiz Questions and Answers
-        ArrayList<Quiz> arr = new ArrayList<>();
-        Quiz q1 = new Quiz();
-        q1.question = "Retrieve all columns and rows from a table named employees.";
-        q1.answer = "SELECT * FROM employees;";
-        Quiz q2 = new Quiz();
-        q2.question = "Get the first_name and last_name of all employees from the employees table who work in the Sales department.";
-        q2.answer = "SELECT first_name, last_name FROM employees WHERE department = 'Sales';";
-        Quiz q3 = new Quiz();
-        q3.question = "Find all products from the products table that have a price greater than 100.";
-        q3.answer = "SELECT * FROM products WHERE price > 100;";
-        Quiz q4 = new Quiz();
-        q4.question = "Insert a new record into the customers table with the values ('John', 'Doe', 'john.doe@example.com') for the columns first_name, last_name, and email, respectively.";
-        q4.answer = "INSERT INTO customers (first_name, last_name, email) VALUES ('John', 'Doe', 'john.doe@example.com');";
-        Quiz q5 = new Quiz();
-        q5.question = "Update the salary of an employee in the employees table to 75000 where the employee_id is 101.";
-        q5.answer = "UPDATE employees SET salary = 75000 WHERE employee_id = 101;";
-        Quiz q6 = new Quiz();
-        q6.question = "Delete rows from the orders table where the order_date is before '2023-01-01'.";
-        q6.answer = "DELETE FROM orders WHERE order_date < '2023-01-01';";
-        Quiz q7 = new Quiz();
-        q7.question = "Count the number of orders in the orders table.";
-        q7.answer = "SELECT COUNT(*) FROM orders;";
-        Quiz q8 = new Quiz();
-        q8.question = "Retrieve the average price of all products in the products table.";
-        q8.answer = "SELECT AVG(price) FROM products;";
-        Quiz q9 = new Quiz();
-        q9.question = "List the product_name and total quantity ordered for each product in the order_details table, grouped by product_name.";
-        q9.answer = "SELECT product_name, SUM(quantity) FROM order_details GROUP BY product_name;";
-        Quiz q10 = new Quiz();
-        q10.question = "Join the customers table and the orders table to retrieve the first_name and last_name of customers along with their order_id.";
-        q10.answer = "SELECT customers.first_name, customers.last_name, orders.order_id FROM customers JOIN orders ON customers.customer_id = orders.customer_id;";
-        arr.add(q1);
-        arr.add(q2);
-        arr.add(q3);
-        arr.add(q4);
-        arr.add(q5);
-        arr.add(q6);
-        arr.add(q7);
-        arr.add(q8);
-        arr.add(q9);
-        arr.add(q10);
-        AddQuizQuestions(arr);
 
         Quiz q;
         Scanner scanner = new Scanner(System.in);
