@@ -1,5 +1,3 @@
-import javax.swing.plaf.nimbus.State;
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -96,7 +94,7 @@ public class QuizApplication {
         Hard
     }
 
-    private static ArrayList<Quiz> getQuestions(Difficulty d) {
+    private static ArrayList<Quiz> getQuizes(Difficulty d) {
         String tableName;
         switch (d) {
             case Easy -> {
@@ -135,38 +133,148 @@ public class QuizApplication {
 
 
     }
+    public static void RunGame() {
+
+        Difficulty d;
+        Quiz q;
+        Scanner scanner = new Scanner(System.in);
+        String check;
+        int choice;
+        boolean invalid;
+        int score = 0;
+        while (true) {
+            System.out.println("""
+                    Select your difficulty
+                    1. Easy
+                    2. Medium
+                    3. Hard
+                    """);
+            choice = scanner.nextInt();
+            invalid = false;
+            switch (choice) {
+                case 1 -> {
+                    d = Difficulty.Easy;
+                }
+                case 2 -> {
+                    d = Difficulty.Medium;
+                }
+                case 3 -> {
+                    d = Difficulty.Hard;
+                }
+                default -> {
+                    System.out.println("You did not select a valid choice");
+                    continue;
+                }
+            }
+
+            ArrayList<Quiz> arr = getQuizes(d);
+            for (int i = 1; i <= arr.size(); i++) {
+                q = arr.get(i - 1);
+                System.out.println("For question " + i + ":");
+                System.out.println(q.question);
+//                System.out.println(q.answer);
+                System.out.println("---".repeat(5));
+
+
+                check = scanner.nextLine();
+                if (check.equals(q.answer)) {
+                    System.out.println("You got the question right");
+                    score += 1;
+                } else {
+                    System.out.println("You got the question wrong. The actual answer is:");
+                    System.out.println(q.answer);
+                }
+            }
+            System.out.println("You have finished the quiz. You score is " + score + " out of 10!");
+        }
+    }
+    public static void ViewLeaderBoard() {
+
+    }
+    public static void displayDirections() {
+        System.out.println("""
+                This is a quiz game meant to test your knowledge in SQL.
+                You will be given questions and you have to answer those questions.
+                If you get you get a question right you will get a point.
+                You can choose difficulty and view the leaderboard.
+                """);
+    }
+    public static void displayMainMenu() {
+        System.out.println("""
+                1.) Start Game
+                2.) View LeaderBoard
+                3.) View Directions
+                3.) Exit
+                """);
+    }
 
     // Main Application
     public static void main(String[] args) {
 
-        
+
+        System.out.println("""
+                SQL Quiz Game
+                ------------------------------
+                """);
+
+
+        displayDirections();
 
         Quiz q;
         Scanner scanner = new Scanner(System.in);
         String check;
+        int choice;
+        boolean invalid;
+        int score;
+        while (true) {
+            displayMainMenu();
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1 -> {
+                    RunGame();
+                }
+                case 2 -> {
+                    ViewLeaderBoard();
+                }
+                case 3 -> {
+                    displayDirections();
+                }
+                case 4 -> {
+                    System.out.println("Exiting Game");
+                    return;
 
-
-        for (int i = 1; i <= arr.size(); i++) {
-            q = getQuiz(i);
-            System.out.println("For question "+i+":");
-            System.out.println(q.question);
-            System.out.println(q.answer);
-            System.out.println("---".repeat(5));
-
-
-            check = scanner.nextLine();
-            if (check.equals(q.answer)) {
-                System.out.println("You got the question right");
-                score+=1;
-            } else {
-                System.out.println("You got the question wrong. The actual answer is:");
-                System.out.println(q.answer);
+                }
+                default -> {
+                    System.out.println("You selected an invalid option!");
+                }
             }
+
 
 
         }
 
-        System.out.println("You have finished the quiz. You score is "+score+" out of 10!");
+//
+//        for (int i = 1; i <= arr.size(); i++) {
+//            q = getQuiz(i);
+//            System.out.println("For question "+i+":");
+//            System.out.println(q.question);
+//            System.out.println(q.answer);
+//            System.out.println("---".repeat(5));
+//
+//
+//            check = scanner.nextLine();
+//            if (check.equals(q.answer)) {
+//                System.out.println("You got the question right");
+//                score+=1;
+//            } else {
+//                System.out.println("You got the question wrong. The actual answer is:");
+//                System.out.println(q.answer);
+//            }
+//
+//
+//        }
+//
+//        System.out.println("You have finished the quiz. You score is "+score+" out of 10!");
 
 
     }
