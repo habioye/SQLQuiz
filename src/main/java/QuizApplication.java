@@ -4,14 +4,15 @@ import java.util.Scanner;
 
 public class QuizApplication {
     public static String username = "root";
-    public static String password = "password";
-    public static String url = "jdbc:mysql://localhost:3306/sqlQuizDB";
+    public static String password = "root";
+    public static String url = "jdbc:mysql://localhost:3306/sqlquizdb";
 
 
     public static void CreateTable() {
 //        String url = "jdbc:mysql://localhost:3306/sqlQuizDB";
 //        String username = "root";
 //        String password = "password";
+
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              Statement statement = connection.createStatement()) {
@@ -93,7 +94,7 @@ public class QuizApplication {
         CreateTable();
         int score = 0;
 
-        // Setup The Quiz Questions and Answers
+        // Set up The Quiz Questions and Answers
         ArrayList<Quiz> arr = new ArrayList<>();
         Quiz q1 = new Quiz();
         q1.question = "Retrieve all columns and rows from a table named employees.";
