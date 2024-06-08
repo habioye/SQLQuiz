@@ -32,11 +32,11 @@ public class QuizApplication {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             for (var quiz : arr) {
                 // Create operation
-                String createQuery = "INSERT INTO Questions (id, question, answer) VALUES ( ?, ?)";
+                String createQuery = "INSERT INTO Questions (question, answer) VALUES ( ?, ?)";
                 try (PreparedStatement createStatement = connection.prepareStatement(createQuery)) {
 //                createStatement.setInt(1, 2);
-                    createStatement.setString(2, quiz.question);
-                    createStatement.setString(3, quiz.answer);
+                    createStatement.setString(1, quiz.question);
+                    createStatement.setString(2, quiz.answer);
                     createStatement.executeUpdate();
                     System.out.println("Record created successfully");
                 } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class QuizApplication {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
             // Read operation
-            String readQuery = "SELECT question, answer FROM users WHERE id = " + i;
+            String readQuery = "SELECT question, answer FROM Questions WHERE id = " + i;
             try (Statement readStatement = connection.createStatement();
                  ResultSet resultSet = readStatement.executeQuery(readQuery)) {
                 while (resultSet.next()) {
@@ -102,7 +102,7 @@ public class QuizApplication {
         q1.answer = "SELECT * FROM employees;";
         Quiz q2 = new Quiz();
         q2.question = "Get the first_name and last_name of all employees from the employees table who work in the Sales department.";
-        q2.answer = "SELECT first_name, last_name FROM employees WHERE department = 'Sales';\n";
+        q2.answer = "SELECT first_name, last_name FROM employees WHERE department = 'Sales';";
         Quiz q3 = new Quiz();
         q3.question = "Find all products from the products table that have a price greater than 100.";
         q3.answer = "SELECT * FROM products WHERE price > 100;";
@@ -144,17 +144,23 @@ public class QuizApplication {
         String check;
 
 
-        for (int i = 0; i < arr.size(); i++) {
+        for (int i = 1; i <= arr.size(); i++) {
             q = getQuiz(i);
             System.out.println("For question "+i+":");
             System.out.println(q.question);
-            check = scanner.next();
-            if (check == q.answer) {
+            System.out.println(q.answer);
+            System.out.println("---".repeat(5));
+
+
+            check = scanner.nextLine();
+            if (check.equals(q.answer)) {
                 System.out.println("You got the question right");
                 score+=1;
             } else {
-                System.out.println("You got the question wrong");
+                System.out.println("You got the question wrong. The actual answer is:");
+                System.out.println(q.answer);
             }
+
 
         }
 
