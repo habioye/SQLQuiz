@@ -1,3 +1,5 @@
+import javax.swing.plaf.nimbus.State;
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -94,11 +96,50 @@ public class QuizApplication {
         Hard
     }
 
-    
+    private static ArrayList<Quiz> getQuestions(Difficulty d) {
+        String tableName;
+        switch (d) {
+            case Easy -> {
+                tableName = "Easy";
+            }
+            case Medium -> {
+                tableName = "Medium";
+
+            }
+            default -> {
+                tableName = "Hard";
+            }
+        }
+        ArrayList<Quiz> ret = new ArrayList<>();
+        Quiz q;
+        String readQuery = "Select Question, Answer From " + tableName;
+        try (Connection connection = DriverManager.getConnection(url,username, password)) {
+            try (Statement readStatement = connection.createStatement()) {
+                ResultSet resultSet = readStatement.executeQuery(readQuery);
+                while (resultSet.next()) {
+                    q = new Quiz();
+                    q.question = resultSet.getString("Question");
+                    q.answer = resultSet.getString("answer");
+                    q.answerLower = q.answer.toLowerCase();
+                    ret.add(q);
+
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ret;
+
+
+    }
 
     // Main Application
     public static void main(String[] args) {
 
+        
 
         Quiz q;
         Scanner scanner = new Scanner(System.in);
