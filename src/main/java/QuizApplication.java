@@ -3,18 +3,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class QuizApplication {
+    // Information to connect to the database
     public static String username = "root";
     public static String password = "root";
     public static String url = "jdbc:mysql://localhost:3306/sqlquizdb";
+    public int score;
 
-
+    // The enumeration of the difficulty
     enum Difficulty {
         Easy,
         Medium,
         Hard
     }
 
-    private static ArrayList<Quiz> getQuizes(Difficulty d) {
+    // Retrieves the quiz Questions from the database depending on difficulty.
+    public static ArrayList<Quiz> getQuizes(Difficulty d) {
         String tableName;
         switch (d) {
             case Easy -> {
@@ -31,7 +34,7 @@ public class QuizApplication {
         ArrayList<Quiz> ret = new ArrayList<>();
         Quiz q;
         String readQuery = "Select Question, Answer From " + tableName;
-        try (Connection connection = DriverManager.getConnection(url,username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             try (Statement readStatement = connection.createStatement()) {
                 ResultSet resultSet = readStatement.executeQuery(readQuery);
                 while (resultSet.next()) {
@@ -53,6 +56,8 @@ public class QuizApplication {
 
 
     }
+
+    // Gets the String difficulty depending on enum difficulty
     public static String getTable(Difficulty d) {
         String table;
         switch (d) {
@@ -69,6 +74,7 @@ public class QuizApplication {
         return table;
     }
 
+    // Gets leaderbaord table absed on difficulty
     public static String getLeaderBoardTable(Difficulty d) {
         String table;
         switch (d) {
@@ -84,38 +90,42 @@ public class QuizApplication {
         }
         return table;
     }
+
+    // Inserts the leaderboard in the leaderboard databased based on the leaderboard object.
     public static void insertLeaderBoard(LeaderBoard leaderBoard) {
         String table = getLeaderBoardTable(leaderBoard.d);
 
-    try(Connection connection = DriverManager.getConnection(url,username,password)) {
-        String createQuery = "INSERT INTO "+table+" (name, score) VALUES (?, ?)";
-        try (PreparedStatement createStatement = connection.prepareStatement(createQuery)){
-            createStatement.setString(1,leaderBoard.name);
-            createStatement.setInt(2,leaderBoard.score);
-            createStatement.executeUpdate();
-            System.out.println("Leaderboard Record Created Successfully");
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String createQuery = "INSERT INTO " + table + " (name, score) VALUES (?, ?)";
+            try (PreparedStatement createStatement = connection.prepareStatement(createQuery)) {
+                createStatement.setString(1, leaderBoard.name);
+                createStatement.setInt(2, leaderBoard.score);
+                createStatement.executeUpdate();
+                System.out.println("Leaderboard Record Created Successfully");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
     }
-    }
+
+    // Gets the ArrayList of the leaderboard table based on the difficulty
     public static ArrayList<LeaderBoard> getLeaderBoard(Difficulty d) {
         ArrayList<LeaderBoard> ret = new ArrayList<>();
         LeaderBoard l;
         String table = getLeaderBoardTable(d);
         String name;
         int score;
-        try (Connection connection = DriverManager.getConnection(url,username,password)) {
-            String readQuery = "SELECT name, score FROM "+table+" ORDER BY score DESC";
-            try(Statement readStatment = connection.createStatement();
-            ResultSet resultSet = readStatment.executeQuery(readQuery)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String readQuery = "SELECT name, score FROM " + table + " ORDER BY score DESC";
+            try (Statement readStatment = connection.createStatement();
+                 ResultSet resultSet = readStatment.executeQuery(readQuery)) {
                 while (resultSet.next()) {
                     name = resultSet.getString("name");
                     score = resultSet.getInt("score");
 
-                    l = new LeaderBoard(d,name,score);
+                    l = new LeaderBoard(d, name, score);
                     ret.add(l);
 
                 }
@@ -127,15 +137,16 @@ public class QuizApplication {
         return ret;
     }
 
+    // Displays the leaderboard in a neat format based on difficulty
     public static void displayLeaderBoard(Difficulty d) {
         ArrayList<LeaderBoard> arr = getLeaderBoard(d);
         String table = getTable(d);
         // Print header
         System.out.println("+---------------------+------------+");
-        System.out.println("| " + String.format("%-33s", getTable(d).toUpperCase()+" " + "LEADERBOARD") + " |");
+        System.out.println("| " + String.format("%-33s", getTable(d).toUpperCase() + " " + "LEADERBOARD") + " |");
 
         System.out.println("+---------------------+------------+");
-    System.out.println("| " + String.format("%-20s", "Name") + " | " + String.format("%-10s", "Score") + " |");
+        System.out.println("| " + String.format("%-20s", "Name") + " | " + String.format("%-10s", "Score") + " |");
         System.out.println("+---------------------+------------+");
 
         // Print each entry in the leaderboard
@@ -149,6 +160,7 @@ public class QuizApplication {
         System.out.println("+---------------------+------------+");
     }
 
+    // Runs the main game for the questions
     public static void RunGame() {
 
         Difficulty d;
@@ -198,6 +210,8 @@ public class QuizApplication {
                     System.out.println("You got the question wrong. The actual answer is:");
                     System.out.println(q.answer);
                 }
+
+
             }
             System.out.println("You have finished the quiz. You score is " + score + " out of 10!");
             System.out.println("Enter your name for the leaderboard");
@@ -207,7 +221,7 @@ public class QuizApplication {
                     System.out.println("Invalid Name. Make sure to insert your name");
                 } else break;
             }
-            LeaderBoard leaderBoard = new LeaderBoard(d,name,score);
+            LeaderBoard leaderBoard = new LeaderBoard(d, name, score);
             insertLeaderBoard(leaderBoard);
             displayLeaderBoard(d);
             return;
@@ -215,6 +229,8 @@ public class QuizApplication {
 
         }
     }
+
+    // Displays the leaderboard as an option for the player
     public static void ViewLeaderBoard() {
         System.out.println("Which Leaderboard do you want to view");
         int choice;
@@ -229,7 +245,7 @@ public class QuizApplication {
             choice = scanner.nextInt();
 
             switch (choice) {
-                case 1-> {
+                case 1 -> {
                     d = Difficulty.Easy;
                 }
                 case 2 -> {
@@ -248,6 +264,8 @@ public class QuizApplication {
             return;
         }
     }
+
+    // Displays the instructions for the game.
     public static void displayDirections() {
         System.out.println("""
                 This is a quiz game meant to test your knowledge in SQL.
@@ -256,6 +274,8 @@ public class QuizApplication {
                 You can choose difficulty and view the leaderboard.
                 """);
     }
+
+    // Displays the main menu options
     public static void displayMainMenu() {
         System.out.println("""
                 1.) Start Game
@@ -307,10 +327,7 @@ public class QuizApplication {
             }
 
 
-
-
         }
-
 
 
     }
