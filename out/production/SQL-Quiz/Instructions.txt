@@ -1,0 +1,14 @@
+* **Day 1: Introduction to Relational Databases**
+    * **Lesson Topics:**
+        * Overview of Relational Databases
+   * Introduction to JDBC (Java Database Connectivity)
+   * Setting up MySQL with Workbench
+ * **Assignments:**
+        * ***Day 1 (Single Dev): SQL Quiz Application***
+            * Create a Java application that quizzes users on SQL queries.
+      * Display a question and prompt the user to input their SQL query.
+     * Validate the user's query against the correct answer and provide feedback.
+     * Keep track of the user's score and display it at the end.
+  * **Extensions:**
+            * Implement a leaderboard to track high scores.
+    * Allow users to select different difficulty levels with varying complexity of SQL queries.
